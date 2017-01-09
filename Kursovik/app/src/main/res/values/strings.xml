@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Kursovik</string>
+    <string name="left">Left</string>
+    <string name="right">Right</string>
+    <string name="forward">Forward</string>
+    <string name="backwards">Backwards</string>
+</resources>
