@@ -1,14 +1,17 @@
-#include <AFMotor.h>
+#define inertia 50
+#define echoPin 10
+#define trigPin 9
+#define MAX_DISTANCE 200; 
 
+#include <AFMotor.h>
 AF_DCMotor motor1(1);
 AF_DCMotor motor2(2);
 AF_DCMotor motor3(3);
 AF_DCMotor motor4(4);
 
+#include <NewPing.h>// documentation: https://bitbucket.org/teckel12/arduino-new-ping/wiki/Home
+NewPing sonar(trigPin, echoPin, MAX_DISTANCE);
 
-int inertia = 50;
-int echoPin = 10;
-int trigPin = 9;
 int myspeed = 0;
 
 void setup() {
@@ -17,21 +20,11 @@ void setup() {
   //  motor2.setSpeed(speed);
   //  motor3.setSpeed(speed);
   //  motor4.setSpeed(speed);
-  pinMode(trigPin, OUTPUT);
-  pinMode(echoPin, INPUT);
 }
 
 void loop() {
-  int duration, cm;
-  digitalWrite(trigPin, LOW);
-  delayMicroseconds(2);
-  digitalWrite(trigPin, HIGH);
-  delayMicroseconds(10);
-  digitalWrite(trigPin, LOW);
-  duration = pulseIn(echoPin, HIGH);
-  cm = duration / 58;
-  Serial.println(cm);
-  int val = Serial.read();
+  Serial.println(sonar.ping_cm());
+  unsigned char val = Serial.read();
   switch (val) {
     case 'W': {
         if (myspeed <= 255 - inertia)
@@ -64,13 +57,13 @@ void loop() {
         motor2.setSpeed(abs(myspeed));
         motor3.setSpeed(abs(myspeed));
         motor4.setSpeed(abs(myspeed));
-        if (myspeed > 0) {
+        if (myspeed > 0){
           motor1.run(FORWARD);
           motor2.run(FORWARD);
           motor3.run(FORWARD);
           motor4.run(FORWARD);
         }
-        else {
+        else{
           motor1.run(BACKWARD);
           motor2.run(BACKWARD);
           motor3.run(BACKWARD);
